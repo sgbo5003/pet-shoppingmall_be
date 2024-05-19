@@ -41,7 +41,11 @@ exports.login = (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      return res.status(200).send("로그인 성공");
+      const userRes = {
+        email: user.email,
+        name: user.name,
+      };
+      return res.status(200).send(userRes);
     });
   })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
 };

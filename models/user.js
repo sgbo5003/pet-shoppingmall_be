@@ -31,6 +31,11 @@ class User extends Sequelize.Model {
           type: Sequelize.STRING(30),
           allowNull: true,
         },
+        adminYn: {
+          type: Sequelize.ENUM("Y", "N"),
+          allowNull: false,
+          defaultValue: "N",
+        },
       },
       {
         sequelize,

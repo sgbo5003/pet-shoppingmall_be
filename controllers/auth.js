@@ -44,6 +44,7 @@ exports.login = (req, res, next) => {
       const userRes = {
         email: user.email,
         name: user.name,
+        adminYn: user.adminYn,
       };
       return res.status(200).send(userRes);
     });

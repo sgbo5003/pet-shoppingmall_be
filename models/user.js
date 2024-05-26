@@ -52,6 +52,7 @@ class User extends Sequelize.Model {
 
   static associate(db) {
     // 테이블 관계를 입력
+    db.User.hasMany(db.Product);
   }
 }
 

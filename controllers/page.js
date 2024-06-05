@@ -1,9 +1,6 @@
 const Category1 = require("../models/category1");
 const Category2 = require("../models/category2");
-const User = require("../models/user");
 
-exports.renderJoin = (req, res, next) => {};
-exports.renderMain = async (req, res, next) => {};
 exports.getCategory1List = async (req, res, next) => {
   // GET category1 list
   try {

@@ -10,6 +10,7 @@ const { sequelize } = require("./models");
 
 dotenv.config(); // process.env
 const pageRouter = require("./routes/page");
+const productRouter = require("./routes/product");
 const authRouter = require("./routes/auth");
 const passportConfig = require("./passport");
 
@@ -53,6 +54,7 @@ app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.
 app.use(passport.session()); // connect.sid라는 이름으로 세션 쿠키가 브라우저로 전송
 
 app.use("/", pageRouter);
+app.use("/product", productRouter);
 app.use("/auth", authRouter);
 
 app.use((req, res, next) => {

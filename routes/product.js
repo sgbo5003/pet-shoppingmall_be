@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { isLoggedIn, isNotLoggedIn } = require("../middlewares");
+const { isLoggedIn } = require("../middlewares");
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
+const { uploadProduct } = require("../controllers/product");
 
 try {
   fs.readdirSync("uploads");
@@ -25,9 +26,6 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-router.post("/img", isLoggedIn, upload.single("img"), afterUploadImage);
-
-const upload2 = multer();
-router.post("/", isLoggedIn, upload2.none(), uploadPost);
+router.post("/admin", isLoggedIn, upload.array("imgFiles"), uploadProduct);
 
 module.exports = router;

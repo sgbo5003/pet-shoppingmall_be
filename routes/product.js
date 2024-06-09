@@ -26,6 +26,6 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-router.post("/admin", isLoggedIn, upload.array("imgFiles"), uploadProduct);
+router.post("/admin", isLoggedIn, upload.array("img"), uploadProduct);
 
 module.exports = router;

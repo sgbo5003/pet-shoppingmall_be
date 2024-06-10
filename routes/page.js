@@ -4,6 +4,7 @@ const {
   getCategory1List,
   getCategory2List,
   getNewProductList,
+  getProductDetail,
 } = require("../controllers/page");
 const { isNotLoggedIn, isLoggedIn } = require("../middlewares");
 
@@ -15,6 +16,7 @@ router.use((req, res, next) => {
 
 router.get("/category1", isLoggedIn, getCategory1List);
 router.get("/category2/:id", isLoggedIn, getCategory2List);
-router.get("/product/new", isNotLoggedIn, getNewProductList);
+router.get("/product/new", getNewProductList);
+router.get("/product/:id", getProductDetail);
 
 module.exports = router;

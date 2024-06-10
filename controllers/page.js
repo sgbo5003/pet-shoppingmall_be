@@ -39,5 +39,24 @@ exports.getNewProductList = async (req, res, next) => {
     next(error);
   }
 };
+exports.getProductDetail = async (req, res, next) => {
+  try {
+    const productDetail = await Product.findOne({
+      where: { id: req.params.id },
+    });
+    let imgFiles = [];
+    Object.keys(productDetail.dataValues).map((key) => {
+      if (key.startsWith("img")) {
+        imgFiles = imgFiles.concat(productDetail.dataValues[key]);
+      }
+    });
+    imgFiles = imgFiles.filter((el) => el != null);
+    productDetail.dataValues["imgFiles"] = imgFiles;
+    res.json(productDetail);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
 
 // 라우터 -> 컨트롤러 -> 서비스

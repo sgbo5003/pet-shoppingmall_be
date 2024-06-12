@@ -1,9 +1,18 @@
 const Product = require("../models/product");
 
 exports.uploadProduct = async (req, res, next) => {
-  const { name, company, origin, category1Id, category2Id, price } = req.body;
+  const {
+    name,
+    company,
+    origin,
+    category1Id,
+    category2Id,
+    regular_price,
+    price,
+    delivery_fee,
+  } = req.body;
   try {
-    // console.log("reqBody", req.body);
+    console.log("reqBody", req.body);
     // console.log("reqFiles", req.files);
     // console.log("reqFiles1", req.files[0].filename);
     // console.log("reqFiles22", req.files[1]);
@@ -24,7 +33,9 @@ exports.uploadProduct = async (req, res, next) => {
       origin,
       Category1Id: category1Id,
       Category2Id: category2Id,
+      regular_price,
       price,
+      delivery_fee,
       UserId: req.user.id,
     });
     return res.status(200).send("상품 등록 성공");

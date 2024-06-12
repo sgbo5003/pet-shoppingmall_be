@@ -31,7 +31,14 @@ exports.getCategory2List = async (req, res, next) => {
 exports.getNewProductList = async (req, res, next) => {
   try {
     const newProduct = await Product.findAll({
-      attributes: ["id", "name", "img1", "price"],
+      attributes: [
+        "id",
+        "name",
+        "img1",
+        "regular_price",
+        "price",
+        "delivery_fee",
+      ],
     });
     res.json(newProduct);
   } catch (error) {

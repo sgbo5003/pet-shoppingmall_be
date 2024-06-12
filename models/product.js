@@ -29,7 +29,15 @@ class Product extends Sequelize.Model {
           type: Sequelize.STRING(50),
           allowNull: false,
         },
+        regular_price: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
         price: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
+        delivery_fee: {
           type: Sequelize.INTEGER,
           allowNull: false,
         },

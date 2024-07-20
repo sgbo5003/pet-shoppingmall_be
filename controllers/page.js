@@ -1,6 +1,7 @@
 const Category1 = require("../models/category1");
 const Category2 = require("../models/category2");
 const Product = require("../models/product");
+const UserWallet = require("../models/userWallet");
 
 exports.getCategory1List = async (req, res, next) => {
   // GET category1 list
@@ -60,6 +61,41 @@ exports.getProductDetail = async (req, res, next) => {
     imgFiles = imgFiles.filter((el) => el != null);
     productDetail.dataValues["imgFiles"] = imgFiles;
     res.json(productDetail);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.getUserWallet = async (req, res, next) => {
+  // GET user wallet
+  try {
+    const userWallet = await UserWallet.findOne({
+      where: { id: req.params.id },
+    });
+    res.json(userWallet);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+exports.updateUserWalletPoint = async (req, res, next) => {
+  // POST user wallet point
+  const { point } = req.body;
+  console.log("pointType", typeof point);
+  try {
+    const userPoint = await UserWallet.findOne({
+      where: { id: req.params.id },
+    });
+    console.log("userPoint", userPoint.point);
+    userPoint.point += point;
+    await UserWallet.update(
+      { point: userPoint.point },
+      {
+        where: { UserId: req.params.id },
+      }
+    );
+    return res.status(200).send(`${point} 포인트 충전 성공`);
   } catch (error) {
     console.error(error);
     next(error);

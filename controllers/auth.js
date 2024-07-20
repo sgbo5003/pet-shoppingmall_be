@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const UserWallet = require("../models/userWallet");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 exports.join = async (req, res, next) => {
@@ -15,6 +16,11 @@ exports.join = async (req, res, next) => {
       password: hash,
       name,
       phone: phoneNumber,
+    });
+    const UserId = await User.findOne({ where: { email } });
+    await UserWallet.create({
+      point: 0,
+      UserId: UserId.id,
     });
     return res.status(200).send("회원가입 성공");
   } catch (error) {
@@ -42,6 +48,7 @@ exports.login = (req, res, next) => {
         return next(loginError);
       }
       const userRes = {
+        id: user.id,
         email: user.email,
         name: user.name,
         adminYn: user.adminYn,

@@ -3,7 +3,7 @@ const UserWallet = require("../models/userWallet");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 exports.join = async (req, res, next) => {
-  const { email, password, name, phoneNumber } = req.body;
+  const { email, password, name, phoneNumber, address } = req.body;
   try {
     const exUser = await User.findOne({ where: { email } });
     if (exUser) {
@@ -16,6 +16,7 @@ exports.join = async (req, res, next) => {
       password: hash,
       name,
       phone: phoneNumber,
+      address,
     });
     const UserId = await User.findOne({ where: { email } });
     await UserWallet.create({
@@ -52,6 +53,7 @@ exports.login = (req, res, next) => {
         email: user.email,
         name: user.name,
         adminYn: user.adminYn,
+        address: user.address,
       };
       return res.status(200).send(userRes);
     });

@@ -62,6 +62,12 @@ exports.login = (req, res, next) => {
 
 exports.logout = (req, res, next) => {
   req.logout(() => {
-    res.status(200).send("로그아웃 성공");
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).send({ message: "로그아웃 실패" });
+      }
+      res.clearCookie("connect.sid");
+      res.status(200).send("로그아웃 성공");
+    });
   });
 };

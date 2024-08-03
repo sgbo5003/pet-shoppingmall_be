@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const path = require("path");
 const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
 const dotenv = require("dotenv");
 const passport = require("passport");
 const { sequelize } = require("./models");
@@ -44,9 +45,19 @@ app.use(
     resave: false,
     saveUninitialized: false,
     secret: process.env.COOKIE_SECRET,
+    store: new MySQLStore({
+      host: "localhost",
+      port: 3306,
+      user: "root",
+      password: "1234",
+      database: "petshoppingmall",
+      clearExpired: true,
+      checkExpirationInterval: 1 * 60 * 1000, // 1 minutes
+    }),
     cookie: {
       httpOnly: true,
       secure: false,
+      maxAge: 30 * 60 * 1000, // 30 minutes,
     },
   })
 );

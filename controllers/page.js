@@ -3,6 +3,19 @@ const Category2 = require("../models/category2");
 const Product = require("../models/product");
 const UserWallet = require("../models/userWallet");
 
+exports.getSessionStatus = async (req, res, next) => {
+  // check session status
+  try {
+    if (req.isAuthenticated()) {
+      res.send({ loggedIn: true, user: req.user });
+    } else {
+      res.send({ loggedIn: false });
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
 exports.getCategory1List = async (req, res, next) => {
   // GET category1 list
   try {
@@ -30,6 +43,7 @@ exports.getCategory2List = async (req, res, next) => {
   }
 };
 exports.getNewProductList = async (req, res, next) => {
+  console.log("req", req.session);
   try {
     const newProduct = await Product.findAll({
       attributes: [

@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const Category1 = require("../models/category1");
 const Category2 = require("../models/category2");
 const Order = require("../models/order");
@@ -41,6 +42,34 @@ exports.getCategory2List = async (req, res, next) => {
       where: { Category1Id: req.params.id, useYn: "Y" },
     });
     res.json(category2);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+exports.getBestProductList = async (req, res, next) => {
+  try {
+    const bestProduct = await OrderItem.findAll({
+      attributes: [
+        "ProductId",
+        [Sequelize.fn("SUM", Sequelize.col("quantity")), "totalSold"],
+      ],
+      include: [
+        {
+          model: Product,
+          attributes: ["id", "name"],
+        },
+      ],
+      group: ["ProductId", "Product.id", "Product.name"],
+      order: [[Sequelize.literal("totalSold"), "DESC"]],
+      limit: 5,
+    });
+    bestProduct.map((product) => ({
+      id: product.Product.id,
+      name: product.Product.name,
+      totalSold: product.dataValues.totalSold,
+    }));
+    res.json(bestProduct);
   } catch (error) {
     console.error(error);
     next(error);

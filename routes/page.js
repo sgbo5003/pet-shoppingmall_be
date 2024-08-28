@@ -9,6 +9,7 @@ const {
   updateUserWalletPoint,
   getSessionStatus,
   checkoutProduct,
+  getBestProductList,
 } = require("../controllers/page");
 const { isNotLoggedIn, isLoggedIn } = require("../middlewares");
 
@@ -21,6 +22,7 @@ router.use((req, res, next) => {
 router.get("/session/status", getSessionStatus);
 router.get("/category1", isLoggedIn, getCategory1List);
 router.get("/category2/:id", isLoggedIn, getCategory2List);
+router.get("/product/best", getBestProductList);
 router.get("/product/new", getNewProductList);
 router.get("/product/:id", getProductDetail);
 router.post("/product/checkout", isLoggedIn, checkoutProduct);

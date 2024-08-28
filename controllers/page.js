@@ -1,6 +1,10 @@
 const Category1 = require("../models/category1");
 const Category2 = require("../models/category2");
+const Order = require("../models/order");
+const Orderer = require("../models/orderer");
+const OrderItem = require("../models/orderItem");
 const Product = require("../models/product");
+const Shipping = require("../models/shipping");
 const UserWallet = require("../models/userWallet");
 
 exports.getSessionStatus = async (req, res, next) => {
@@ -110,6 +114,57 @@ exports.updateUserWalletPoint = async (req, res, next) => {
       }
     );
     return res.status(200).send(`${point} 포인트 충전 성공`);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+exports.checkoutProduct = async (req, res, next) => {
+  const {
+    name,
+    address,
+    orderPhone1,
+    orderPhone2,
+    email,
+    shippingName,
+    shippingAddress,
+    shippingPhone1,
+    shippingPhone2,
+    request,
+    quantity,
+    price,
+    productId,
+  } = req.body;
+  try {
+    console.log("reqBody", req.body);
+    const newOrder = await Order.create({
+      status: "Paid",
+      UserId: req.user.id,
+    });
+    const orderId = newOrder.id;
+    await Orderer.create({
+      name,
+      address,
+      phone1: orderPhone1,
+      phone2: orderPhone2,
+      email,
+      OrderId: orderId,
+    });
+    await Shipping.create({
+      name: shippingName,
+      address: shippingAddress,
+      phone1: shippingPhone1,
+      phone2: shippingPhone2,
+      request,
+      OrderId: orderId,
+    });
+    await OrderItem.create({
+      quantity,
+      price,
+      OrderId: orderId,
+      ProductId: productId,
+    });
+    return res.status(200).send("상품 주문 성공");
   } catch (error) {
     console.error(error);
     next(error);

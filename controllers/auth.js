@@ -42,18 +42,20 @@ exports.login = (req, res, next) => {
       res.status(400).send(info.message);
       return;
     }
-    return req.login(user, (loginError) => {
+    return req.login(user, async (loginError) => {
       // 로그인 성공
       if (loginError) {
         console.error(loginError);
         return next(loginError);
       }
+      const UserPoint = await UserWallet.findOne({ where: { id: user.id } });
       const userRes = {
         id: user.id,
         email: user.email,
         name: user.name,
         adminYn: user.adminYn,
         address: user.address,
+        point: UserPoint.point,
       };
       return res.status(200).send(userRes);
     });

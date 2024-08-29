@@ -57,7 +57,14 @@ exports.getBestProductList = async (req, res, next) => {
       include: [
         {
           model: Product,
-          attributes: ["id", "name"],
+          attributes: [
+            "id",
+            "name",
+            "img1",
+            "regular_price",
+            "price",
+            "delivery_fee",
+          ],
         },
       ],
       group: ["ProductId", "Product.id", "Product.name"],

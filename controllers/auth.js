@@ -73,3 +73,19 @@ exports.logout = (req, res, next) => {
     });
   });
 };
+
+exports.modify = async (req, res, next) => {
+  const { email, password, name, phoneNumber, address } = req.body;
+  try {
+    await User.update(
+      { password, name, phoneNumber, address },
+      {
+        where: { email },
+      }
+    );
+    return res.status(200).send(`회원정보 수정 완료`);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};

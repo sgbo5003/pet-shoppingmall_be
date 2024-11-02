@@ -75,14 +75,59 @@ exports.logout = (req, res, next) => {
 };
 
 exports.modify = async (req, res, next) => {
-  const { email, password, name, phoneNumber, address } = req.body;
+  const { email, password, newPassword, name, phoneNumber, address } = req.body;
   try {
-    await User.update(
-      { password, name, phoneNumber, address },
-      {
-        where: { email },
+    if (password) {
+      if (newPassword) {
+        const exUser = await User.findOne({ where: { email } });
+        if (!bcrypt.compare(password, exUser.password)) {
+          res.status(400).send("입력하신 현재 비밀번호가 틀렸습니다.");
+          return;
+        } else {
+          const hash = await bcrypt.hash(newPassword, 12);
+          if (phoneNumber) {
+            await User.update(
+              {
+                password: hash,
+                name,
+                phone: phoneNumber,
+                address,
+              },
+              {
+                where: { email },
+              }
+            );
+          } else {
+            await User.update(
+              {
+                password: hash,
+                name,
+                address,
+              },
+              {
+                where: { email },
+              }
+            );
+          }
+        }
       }
-    );
+    } else {
+      if (phoneNumber) {
+        await User.update(
+          { name, phone: phoneNumber, address },
+          {
+            where: { email },
+          }
+        );
+      } else {
+        await User.update(
+          { name, address },
+          {
+            where: { email },
+          }
+        );
+      }
+    }
     return res.status(200).send(`회원정보 수정 완료`);
   } catch (error) {
     console.error(error);
